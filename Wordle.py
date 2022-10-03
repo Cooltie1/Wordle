@@ -21,26 +21,31 @@ def wordle():
 
             #loop through tiles in current row
             for colNum in range(0,N_COLS):
-                #if tile is in correct position, color green
+                #if tile is in correct position, color TILE and KEY green
                 if gw.get_square_letter(gw.get_current_row(),colNum) == word[colNum]:
                     #add letter to list of letters found
                     lettersFound += gw.get_square_letter(gw.get_current_row(),colNum)
                     gw.set_square_color(gw.get_current_row(),colNum,CORRECT_COLOR)
+                    gw.set_key_color(gw.get_square_letter(gw.get_current_row(),colNum),CORRECT_COLOR)
             #loop through tiles in current row again
             for colNum in range(0,N_COLS):
-                #if tile isn't green, but is in the word...
+                #if TILE isn't green, but is in the word...
                 if (gw.get_square_color(gw.get_current_row(),colNum) != CORRECT_COLOR) and (gw.get_square_letter(gw.get_current_row(),colNum) in word):
                     #add letter to list of letters found
                     lettersFound += gw.get_square_letter(gw.get_current_row(),colNum)
-                    #if letter hasn't been found more times than it is present in the word, color it yellow
+                    #if letter hasn't been found more times than it is present in the word, color TILE yellow
                     if lettersFound.count(gw.get_square_letter(gw.get_current_row(),colNum)) <= word.count(gw.get_square_letter(gw.get_current_row(),colNum)):
                         gw.set_square_color(gw.get_current_row(),colNum,PRESENT_COLOR)
-                    #otherwise, color it grey
+                    #otherwise, color TILE grey
                     else:
                         gw.set_square_color(gw.get_current_row(),colNum,MISSING_COLOR)
-                #if tile isn't green and didn't meet the first criteria (being in the word), it must be grey
+                    #if KEY isn't green already, color it yellow
+                    if gw.get_key_color(gw.get_square_letter(gw.get_current_row(),colNum)) != CORRECT_COLOR:
+                        gw.set_key_color(gw.get_square_letter(gw.get_current_row(),colNum), PRESENT_COLOR)
+                #if TILE isn't green and didn't meet the first criteria (being in the word), TILE and KEY must be grey
                 elif gw.get_square_color(gw.get_current_row(),colNum) != CORRECT_COLOR:
                     gw.set_square_color(gw.get_current_row(),colNum,MISSING_COLOR)
+                    gw.set_key_color(gw.get_square_letter(gw.get_current_row(),colNum), MISSING_COLOR)
             #display congratulations if guess is correct
             if buildWord == word:
                 gw.show_message("Congratulations! You guessed the word!")
