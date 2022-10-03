@@ -41,15 +41,24 @@ def wordle():
                 #if tile isn't green and didn't meet the first criteria (being in the word), it must be grey
                 elif gw.get_square_color(gw.get_current_row(),colNum) != CORRECT_COLOR:
                     gw.set_square_color(gw.get_current_row(),colNum,MISSING_COLOR)
+            #display congratulations if guess is correct
             if buildWord == word:
                 gw.show_message("Congratulations! You guessed the word!")
+            #display incorrect message and reveal word if last guess is incorrect
+            elif gw.get_current_row() == N_ROWS - 1:
+                gw.show_message("Game over! The word was " + word + ".")
+            #display message to keep guessing if guess is incorrect
             else:
-                gw.show_message("Your guess, " + buildWord + ", is incorrect.")
-        #if the user's guess isn't in the dictionary, clear guess and show "not in word list" *****still need to add logic to allow another guess******
+                gw.show_message("Your guess, " + buildWord + ", is incorrect. Keep guessing!")
+            #move to next row to allow another guess unless game is over
+            if gw.get_current_row() < (N_ROWS - 1):
+                gw.set_current_row(gw.get_current_row() + 1)
+        #if the user's guess isn't in the dictionary, clear guess and show "not in word list"
         else:
             for colNum in range(0,N_COLS):
                 gw.set_square_letter(gw.get_current_row(),colNum,"")
             gw.show_message("Not in word list.")
+            gw.set_current_row(gw.get_current_row())
         
 
     gw = WordleGWindow()
