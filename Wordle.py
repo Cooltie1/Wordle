@@ -3,7 +3,7 @@
 import random
 
 from WordleDictionary import FIVE_LETTER_WORDS
-from WordleGraphics import WordleGWindow, N_COLS, N_ROWS
+from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR
 
 def wordle():
     def enter_action(s):
@@ -13,6 +13,29 @@ def wordle():
             buildWord += gw.get_square_letter(currentRow,tile)
         if buildWord.lower() in FIVE_LETTER_WORDS:
             gw.show_message("You guessed " + buildWord)
+
+            #method 1 for coloring tiles
+            lettersFound = ""
+            for letterNum in range(0,N_COLS):
+                if gw.get_square_letter(gw.get_current_row(),letterNum) == word[letterNum]:
+                    gw.set_square_color(gw.get_current_row(),letterNum,CORRECT_COLOR)
+                    lettersFound += gw.get_square_letter(gw.get_current_row(),letterNum)
+                elif (gw.get_square_letter(gw.get_current_row(),letterNum) in word) and (lettersFound.count(gw.get_square_letter(gw.get_current_row(),letterNum)) <= word.count(gw.get_square_letter(gw.get_current_row(),letterNum))):
+                    gw.set_square_color(gw.get_current_row(),letterNum,PRESENT_COLOR)
+                    lettersFound += gw.get_square_letter(gw.get_current_row(),letterNum)
+                else:
+                    gw.set_square_color(gw.get_current_row(),letterNum,MISSING_COLOR)
+            
+            # #method 2 for coloring tiles
+            # letterNum = 0
+            # for letter in word:
+            #     if gw.get_square_letter(gw.get_current_row(),letterNum) == letter:
+            #         gw.set_square_color(gw.get_current_row(),letterNum,CORRECT_COLOR)
+            #     elif gw.get_square_letter(gw.get_current_row(),letterNum) in word:
+            #         gw.set_square_color(gw.get_current_row(),letterNum,PRESENT_COLOR)
+            #     else:
+            #         gw.set_square_color(gw.get_current_row(),letterNum,MISSING_COLOR)
+            #     letterNum += 1
         else:
             for tile in range(0,N_COLS):
                 gw.set_square_letter(currentRow,tile,"")
@@ -23,7 +46,8 @@ def wordle():
     gw.add_enter_listener(enter_action)
 
     #Selects random word from dictionary
-    word = FIVE_LETTER_WORDS[random.randint(0,(len(FIVE_LETTER_WORDS)-1))].upper()
+    word = "GLASS"
+    #word = FIVE_LETTER_WORDS[random.randint(0,(len(FIVE_LETTER_WORDS)-1))].upper()
 
     letterNum = 0
     for letter in word:
@@ -31,9 +55,6 @@ def wordle():
         letterNum += 1
 
     gw.set_current_row(1)
-
-
-
 
 # Startup code
 
