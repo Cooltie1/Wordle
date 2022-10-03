@@ -14,8 +14,6 @@ def wordle():
         
         #if the user's guess is in the dictionary, proceed
         if buildWord.lower() in FIVE_LETTER_WORDS:
-            gw.show_message("You guessed " + buildWord)
-
             #coloring tiles
 
             #keeps string containing letters found
@@ -43,6 +41,10 @@ def wordle():
                 #if tile isn't green and didn't meet the first criteria (being in the word), it must be grey
                 elif gw.get_square_color(gw.get_current_row(),colNum) != CORRECT_COLOR:
                     gw.set_square_color(gw.get_current_row(),colNum,MISSING_COLOR)
+            if buildWord == word:
+                gw.show_message("Congratulations! You guessed the word!")
+            else:
+                gw.show_message("Your guess, " + buildWord + ", is incorrect.")
         #if the user's guess isn't in the dictionary, clear guess and show "not in word list" *****still need to add logic to allow another guess******
         else:
             for colNum in range(0,N_COLS):
@@ -54,8 +56,7 @@ def wordle():
     gw.add_enter_listener(enter_action)
 
     #Selects random word from dictionary
-    word = "GLASS"
-    #word = FIVE_LETTER_WORDS[random.randint(0,(len(FIVE_LETTER_WORDS)-1))].upper()
+    word = FIVE_LETTER_WORDS[random.randint(0,(len(FIVE_LETTER_WORDS)-1))].upper()
 
     letterNum = 0
     for letter in word:
