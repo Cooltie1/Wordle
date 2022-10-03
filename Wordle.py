@@ -7,38 +7,46 @@ from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, CORRECT_COLOR, PRESENT
 
 def wordle():
     def enter_action(s):
-        currentRow = gw.get_current_row()
+        #strings together the user's guess
         buildWord = ""
-        for tile in range(0,N_COLS):
-            buildWord += gw.get_square_letter(currentRow,tile)
+        for colNum in range(0,N_COLS):
+            buildWord += gw.get_square_letter(gw.get_current_row(),colNum)
+        
+        #if the user's guess is in the dictionary, proceed
         if buildWord.lower() in FIVE_LETTER_WORDS:
             gw.show_message("You guessed " + buildWord)
 
-            #method 1 for coloring tiles
+            #coloring tiles
+
+            #keeps string containing letters found
             lettersFound = ""
-            for letterNum in range(0,N_COLS):
-                if gw.get_square_letter(gw.get_current_row(),letterNum) == word[letterNum]:
-                    gw.set_square_color(gw.get_current_row(),letterNum,CORRECT_COLOR)
-                    lettersFound += gw.get_square_letter(gw.get_current_row(),letterNum)
-                elif (gw.get_square_letter(gw.get_current_row(),letterNum) in word) and (lettersFound.count(gw.get_square_letter(gw.get_current_row(),letterNum)) <= word.count(gw.get_square_letter(gw.get_current_row(),letterNum))):
-                    gw.set_square_color(gw.get_current_row(),letterNum,PRESENT_COLOR)
-                    lettersFound += gw.get_square_letter(gw.get_current_row(),letterNum)
-                else:
-                    gw.set_square_color(gw.get_current_row(),letterNum,MISSING_COLOR)
-            
-            # #method 2 for coloring tiles
-            # letterNum = 0
-            # for letter in word:
-            #     if gw.get_square_letter(gw.get_current_row(),letterNum) == letter:
-            #         gw.set_square_color(gw.get_current_row(),letterNum,CORRECT_COLOR)
-            #     elif gw.get_square_letter(gw.get_current_row(),letterNum) in word:
-            #         gw.set_square_color(gw.get_current_row(),letterNum,PRESENT_COLOR)
-            #     else:
-            #         gw.set_square_color(gw.get_current_row(),letterNum,MISSING_COLOR)
-            #     letterNum += 1
+
+            #loop through tiles in current row
+            for colNum in range(0,N_COLS):
+                #if tile is in correct position, color green
+                if gw.get_square_letter(gw.get_current_row(),colNum) == word[colNum]:
+                    #add letter to list of letters found
+                    lettersFound += gw.get_square_letter(gw.get_current_row(),colNum)
+                    gw.set_square_color(gw.get_current_row(),colNum,CORRECT_COLOR)
+            #loop through tiles in current row again
+            for colNum in range(0,N_COLS):
+                #if tile isn't green, but is in the word...
+                if (gw.get_square_color(gw.get_current_row(),colNum) != CORRECT_COLOR) and (gw.get_square_letter(gw.get_current_row(),colNum) in word):
+                    #add letter to list of letters found
+                    lettersFound += gw.get_square_letter(gw.get_current_row(),colNum)
+                    #if letter hasn't been found more times than it is present in the word, color it yellow
+                    if lettersFound.count(gw.get_square_letter(gw.get_current_row(),colNum)) <= word.count(gw.get_square_letter(gw.get_current_row(),colNum)):
+                        gw.set_square_color(gw.get_current_row(),colNum,PRESENT_COLOR)
+                    #otherwise, color it grey
+                    else:
+                        gw.set_square_color(gw.get_current_row(),colNum,MISSING_COLOR)
+                #if tile isn't green and didn't meet the first criteria (being in the word), it must be grey
+                elif gw.get_square_color(gw.get_current_row(),colNum) != CORRECT_COLOR:
+                    gw.set_square_color(gw.get_current_row(),colNum,MISSING_COLOR)
+        #if the user's guess isn't in the dictionary, clear guess and show "not in word list" *****still need to add logic to allow another guess******
         else:
-            for tile in range(0,N_COLS):
-                gw.set_square_letter(currentRow,tile,"")
+            for colNum in range(0,N_COLS):
+                gw.set_square_letter(gw.get_current_row(),colNum,"")
             gw.show_message("Not in word list.")
         
 
