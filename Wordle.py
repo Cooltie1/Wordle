@@ -72,13 +72,8 @@ def wordle():
     #Selects random word from dictionary
     word = FIVE_LETTER_WORDS[random.randint(0,(len(FIVE_LETTER_WORDS)-1))].upper()
 
-    #enters goal word into first row
-    letterNum = 0
-    for letter in word:
-        gw.set_square_letter(0,letterNum,letter)
-        letterNum += 1
-    #moves to second row to allow user's first guess
-    gw.set_current_row(1)
+    #moves to first row to allow user's first guess
+    gw.set_current_row(0)
 
 # Startup code
 if __name__ == "__main__":
